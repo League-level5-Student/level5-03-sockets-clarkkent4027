@@ -48,6 +48,7 @@ public class ButtonClicker extends JFrame {
 			setSize(400, 300);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			client.start();
+
 		}
 	}
 }
