@@ -1,13 +1,17 @@
 package _02_Chat_Application;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
+import java.net.SocketTimeoutException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import _00_Click_Chat.networking.Client;
 import _00_Click_Chat.networking.Server;
@@ -17,16 +21,20 @@ import _00_Click_Chat.networking.Server;
  */
 
 public class ChatApp extends JFrame {
-	JButton button = new JButton("CLICK");
-	Server server;
+	
+	JButton button = new JButton("Send message");
+	JTextArea text = new JTextArea(5,10);
+	JPanel panel = new JPanel();
 	Client client;
-
+	Server server;
+//	Socket socket;
+//	ServerSocket serversocket;
 	public static void main(String[] args) {
 		new ChatApp();
 	}
 
 	public ChatApp() {
-		int response = JOptionPane.showConfirmDialog(null, "Would you like to host a connection?", "Buttons!",
+		int response = JOptionPane.showConfirmDialog(null, "Would you like to host a connection?", "Welcome to ChatApp!",
 				JOptionPane.YES_NO_OPTION);
 		if (response == JOptionPane.YES_OPTION) {
 			server = new Server(8080);
@@ -35,14 +43,16 @@ public class ChatApp extends JFrame {
 					"Server started at: " + server.getIPAddress() + "\nPort: " + server.getPort());
 			System.out.println(server.getIPAddress());
 			button.addActionListener((e) -> {
-			//	server.sendClick();
+			 server.sendMessage(text.getText());
+			 System.out.println(text.getText());
 			});
-			add(button);
+			panel.add(button);
+			panel.add(text);
+			add(panel);
 			setVisible(true);
-			setSize(400, 300);
+			setSize(400, 100);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			server.start();
-
 		} else {
 			setTitle("CLIENT");
 			String ipStr = JOptionPane.showInputDialog("Enter the IP Address");
@@ -50,11 +60,14 @@ public class ChatApp extends JFrame {
 			int port = Integer.parseInt(prtStr);
 			client = new Client(ipStr, port);
 			button.addActionListener((e) -> {
-			//	client.sendClick();
+				 client.sendMessage(text.getText());
+				 System.out.println(text.getText());
 			});
-			add(button);
+			panel.add(button);
+			panel.add(text);
+			add(panel);
 			setVisible(true);
-			setSize(400, 300);
+			setSize(400, 100);
 			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			client.start();
 
