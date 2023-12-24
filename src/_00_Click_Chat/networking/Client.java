@@ -64,9 +64,10 @@ public class Client {
 		try {
 			if(os != null) {
 				os.writeObject(s);
+				System.out.println(s);
 				os.flush();
 			}
-		}catch(Exception e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}

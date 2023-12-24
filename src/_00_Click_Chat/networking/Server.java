@@ -74,12 +74,14 @@ public class Server {
 	}
 	
 	public void sendMessage(String s) {
+		System.out.println(s + "server");
 		try {
 			if(os != null) {
 				os.writeObject(s);
+				System.out.println(s);
 				os.flush();
 			}
-		}catch(Exception e) {
+		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
