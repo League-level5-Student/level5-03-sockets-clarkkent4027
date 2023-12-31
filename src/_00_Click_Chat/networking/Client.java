@@ -1,5 +1,6 @@
 package _00_Click_Chat.networking;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -11,6 +12,7 @@ import javax.swing.JOptionPane;
 public class Client {
 	private String ip;
 	private int port;
+	public String o;
 
 	Socket connection;
 
@@ -22,7 +24,7 @@ public class Client {
 		this.port = port;
 	}
 
-	public void start(){
+	public void start() {
 		try {
 
 			connection = new Socket(ip, port);
@@ -32,23 +34,23 @@ public class Client {
 
 			os.flush();
 
-			
+			while (connection.isConnected()) {
+				try {
+					o = is.readObject().toString();
+					JOptionPane.showMessageDialog(null, o);
+					System.out.println("CLIENT " + o);
+				} catch (EOFException e) {
+					JOptionPane.showMessageDialog(null, "Connection Lost");
+					System.exit(0);
+				}
+			}
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		while (connection.isConnected()) {
-			try {
-				JOptionPane.showMessageDialog(null, is.readObject());
-				System.out.println(is.readObject());
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
 	}
-	
+
 	public void sendClick() {
 		try {
 			if (os != null) {
@@ -59,15 +61,15 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sendMessage(String s) {
+		// System.out.println(s);
 		try {
-			if(os != null) {
+			if (os != null) {
 				os.writeObject(s);
-				System.out.println(s);
 				os.flush();
 			}
-		}catch(IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}

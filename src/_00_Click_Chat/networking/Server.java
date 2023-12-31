@@ -16,10 +16,11 @@ public class Server {
 
 	private ServerSocket server;
 	private Socket connection;
-
+	public String o;
 	ObjectOutputStream os;
 	ObjectInputStream is;
 
+	
 	public Server(int port) {
 		this.port = port;
 	}
@@ -34,11 +35,12 @@ public class Server {
 			is = new ObjectInputStream(connection.getInputStream());
 
 			os.flush();
-
 			while (connection.isConnected()) {
+				System.out.println("connected?");
 				try {
-					JOptionPane.showMessageDialog(null, is.readObject());
-					System.out.println(is.readObject());
+					 o = is.readObject().toString();
+					JOptionPane.showMessageDialog(null, o);
+					System.out.println( "CLIENT " +  o);
 				}catch(EOFException e) {
 					JOptionPane.showMessageDialog(null, "Connection Lost");
 					System.exit(0);
@@ -74,11 +76,11 @@ public class Server {
 	}
 	
 	public void sendMessage(String s) {
-		System.out.println(s + "server");
+		//System.out.println(s);
 		try {
 			if(os != null) {
 				os.writeObject(s);
-				System.out.println(s);
+
 				os.flush();
 			}
 		}catch(IOException e) {
